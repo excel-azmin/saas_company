@@ -61,14 +61,16 @@ app_license = "MIT"
 # Installation
 # ------------
 
-# before_install = "saas_company.install.before_install"
+before_install = "saas_company.add_custom_field.create_allocated_company_child_doctype"
+after_install = "saas_company.add_custom_field.add_allocated_company_table_to_all_doctypes"
+
 # after_install = "saas_company.install.after_install"
 
 # Uninstallation
 # ------------
 
 # before_uninstall = "saas_company.uninstall.before_uninstall"
-# after_uninstall = "saas_company.uninstall.after_uninstall"
+after_uninstall = "saas_company.add_custom_field.remove_allocated_company_table_from_all_doctypes"
 
 # Integration Setup
 # ------------------
