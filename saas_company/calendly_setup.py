@@ -8,8 +8,7 @@ calendly_settings = frappe.get_doc('Calendly Settings')
 # Base URLs for Calendly API (v2) and webhook URL
 calendly_base_url = "https://api.calendly.com"
 get_host_url=frappe.utils.get_url().replace("http://", "https://") 
-demo_site="https://mark-erp.arcapps.org"
-webhook_url = f"{demo_site}/api/method/saas_company.api.create_appointment"
+webhook_url = f"{get_host_url}/api/method/saas_company.api.create_appointment"
 
 # Headers with Authorization token and content type
 headers = {
