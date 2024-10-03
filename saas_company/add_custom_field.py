@@ -39,6 +39,7 @@ def create_allocated_company_child_doctype():
 
 
 def add_allocated_company_table_to_all_doctypes():
+    create_allocated_company_child_doctype()
     # Get a list of all doctypes in the ERPNext system
     all_doctypes = frappe.get_all('DocType', filters={'issingle': 0})  # Excludes single doctypes
 
