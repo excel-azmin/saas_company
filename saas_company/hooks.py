@@ -61,7 +61,7 @@ app_license = "MIT"
 # Installation
 # ------------
 
-before_install = "saas_company.add_custom_field.create_allocated_company_child_doctype"
+# before_install = "saas_company.add_custom_field.create_allocated_company_child_doctype"
 after_install = "saas_company.add_custom_field.add_allocated_company_table_to_all_doctypes"
 
 # after_install = "saas_company.install.after_install"
@@ -110,21 +110,24 @@ after_uninstall = "saas_company.add_custom_field.remove_allocated_company_table_
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+    "Newsletter": "saas_company.overrides.newsletter.SaasEmailNewsLetter.SaasEmailNewsLetter"
+}
 
 # Document Events
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+	"*": {
+		"on_update": "saas_company.add_custom_field.test",
+		# "on_cancel": "method",
+		# "on_trash": "method"
+	},
+	"User":{
+		"on_update":"saas_company.add_custom_field.check_user_allocated_company"
+	}
+}
 
 # Scheduled Tasks
 # ---------------
