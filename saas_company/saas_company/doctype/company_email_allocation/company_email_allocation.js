@@ -69,5 +69,25 @@ frappe.ui.form.on('Company Email Allocation', {
 
             d.show();
         });
+        const company = frm.doc.company
+        if(company){
+            frappe.call({
+                method: "saas_company.api.get_current_month_total_newsletter_mail",
+                args: {
+                    company: company // Replace with actual company name
+                },
+                callback: function(response) {
+                    // Handle the response here
+                    if(response.message) {
+                        const remaining= frm.doc.allocated - response.message
+                        frm.set_value('remaining',remaining)
+                        frm.refresh_field("remaining")
+                    }
+                },
+                error: function(error) {
+                    console.log("An error occurred:", error);
+                }
+            });
+        }
     }
 });
