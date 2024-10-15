@@ -28,12 +28,14 @@
    "fieldtype": "Int",
    "in_list_view": 1,
    "label": "Allocated",
+   "read_only": 1,
    "reqd": 1
   },
   {
    "fieldname": "remaining",
    "fieldtype": "Int",
-   "label": "Remaining"
+   "label": "Remaining",
+   "read_only": 1
   },
   {
    "default": "CU",
@@ -44,7 +46,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-10-05 12:57:05.279458",
+ "modified": "2024-10-15 23:34:47.675803",
  "modified_by": "Administrator",
  "module": "Saas Company",
  "name": "Company Email Allocation",

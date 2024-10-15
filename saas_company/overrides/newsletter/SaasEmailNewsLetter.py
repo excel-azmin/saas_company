@@ -7,7 +7,9 @@ class SaasEmailNewsLetter(Newsletter):
     def before_save(self):
         total_subscriber = self.get_current_total_subscriber()
         total_current_month_subscriber = self.get_current_month_total_subscriber()
-        get_total_allocated_mail = frappe.db.get_value('Company Email Allocation', self.custom_company, 'allocated')
+        get_total_allocated_mail = frappe.db.get_value('Company Email Allocation', {"name":self.custom_company,"is_active":1}, 'allocated')
+        if get_total_allocated_mail is None:
+            frappe.throw("Contact With Admin")
         get_total_subscribe_mail= total_subscriber+ total_current_month_subscriber
         if get_total_allocated_mail < get_total_subscribe_mail:
             frappe.throw('Email Allocation limit exceeded for the month.')
@@ -33,7 +35,7 @@ class SaasEmailNewsLetter(Newsletter):
             FROM `tabNewsletter` AS nwl
             LEFT JOIN `tabNewsletter Email Group` AS eg
             ON nwl.name = eg.parent
-            WHERE YEAR(nwl.creation) = %s AND MONTH(nwl.creation) = %s AND nwl.custom_company= %s
+            WHERE YEAR(nwl.creation) = %s AND MONTH(nwl.creation) = %s AND nwl.custom_company= %s and nwl.email_sent=1
             GROUP BY nwl.name
             """,
             (current_year, current_month, company),

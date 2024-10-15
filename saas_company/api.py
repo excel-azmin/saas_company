@@ -40,7 +40,7 @@ def get_current_month_total_newsletter_mail(company):
         FROM `tabNewsletter` AS nwl
         LEFT JOIN `tabNewsletter Email Group` AS eg
         ON nwl.name = eg.parent
-        WHERE YEAR(nwl.creation) = %s AND MONTH(nwl.creation) = %s AND nwl.custom_company = %s
+        WHERE YEAR(nwl.creation) = %s AND MONTH(nwl.creation) = %s AND nwl.custom_company = %s AND nwl.email_sent=1
         GROUP BY nwl.name
         """,
         (current_year, current_month, company),

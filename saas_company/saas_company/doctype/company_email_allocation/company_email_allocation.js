@@ -1,6 +1,6 @@
 frappe.ui.form.on('Company Email Allocation', {
     refresh: function(frm) {
-        frm.add_custom_button(__('Open Integer Prompt'), function() {
+        frm.add_custom_button(__('Adjust Allocation'), function() {
             let d = new frappe.ui.Dialog({
                 title: 'Integer Input Dialog',
                 fields: [
@@ -24,6 +24,7 @@ frappe.ui.form.on('Company Email Allocation', {
                 ],
                 primary_action_label: 'Submit',
                 primary_action(values) {
+                    console.log(values)
                     // Ensure the integer input is valid and required
                     if (isNaN(values.integer_input) || values.integer_input === '') {
                         frappe.msgprint(__('Please enter a valid integer.'));
@@ -31,25 +32,19 @@ frappe.ui.form.on('Company Email Allocation', {
                     }
 
                     // Ensure only one of the checkboxes is checked
-                    if (values.increase_check && values.decrease_check) {
-                        frappe.msgprint(__('You cannot check both Increase and Decrease at the same time.'));
-                        return;
-                    }
-					if (!values.increase_check || !values.decrease_check) {
-                        frappe.msgprint(__('Select Increase or Decrease '));
-                        return;
-                    }
-
                     // Handle the integer input and increment/decrement logic
-                    let result = values.integer_input;
+                    let result = frm.doc.allocated;
 
                     if (values.increase_check) {
-                        result += 1;  // Increase the integer value
-                    } else if (values.decrease_check) {
-                        result -= 1;  // Decrease the integer value
+                        result += values.integer_input; 
+                        frm.set_value("allocated",result) // Increase the integer value
+                    } else if (values.decrease_check ) {
+                        result -= values.integer_input;
+                        frm.set_value("allocated",result)   // Decrease the integer value
                     }
 
                     frappe.msgprint('You entered: ' + result);
+                    frm.save()
                     d.hide();
                 }
             });
@@ -70,7 +65,7 @@ frappe.ui.form.on('Company Email Allocation', {
             d.show();
         });
         const company = frm.doc.company
-        if(company){
+        if(company && !frm.is_new()){
             frappe.call({
                 method: "saas_company.api.get_current_month_total_newsletter_mail",
                 args: {
@@ -82,6 +77,7 @@ frappe.ui.form.on('Company Email Allocation', {
                         const remaining= frm.doc.allocated - response.message
                         frm.set_value('remaining',remaining)
                         frm.refresh_field("remaining")
+                        frm.save()
                     }
                 },
                 error: function(error) {
